@@ -1,0 +1,32 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vkuftyrau/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true vkuftyrau/react-test npm run test
+
+after_success:
+  - docker build -t vkuftyrau/multi-client ./client
+  - docker build -t vkuftyrau/multi-nginx ./nginx
+  - docker build -t vkuftyrau/multi-server ./server
+  - docker build -t vkuftyrau/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push vkuftyrau/multi-client
+  - docker push vkuftyrau/multi-nginx
+  - docker push vkuftyrau/multi-server
+  - docker push vkuftyrau/multi-worker
+
+# deploy:
+#   provider: elasticbeanstalk
+#   region: "eu-west-3"
+#   app: "docker"
+#   env: "Docker-env"
+#   bucket_name: "elasticbeanstalk-eu-west-3-541172487887"
+#   bucket_path: "docker"
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_KEY
