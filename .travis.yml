@@ -19,14 +19,14 @@ after_success:
   - docker push vkuftyrau/multi-server
   - docker push vkuftyrau/multi-worker
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "eu-west-3"
-#   app: "docker"
-#   env: "Docker-env"
-#   bucket_name: "elasticbeanstalk-eu-west-3-541172487887"
-#   bucket_path: "docker"
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_KEY
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-west-3"
+  app: "multi-docker-new"
+  env: "Multidockernew-env"
+  bucket_name: "elasticbeanstalk-eu-west-3-541172487887"
+  bucket_path: "docker-multi"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
